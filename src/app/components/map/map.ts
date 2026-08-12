@@ -104,8 +104,10 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   ngAfterViewInit(): void {
     this.map = L.map(this.mapContainer().nativeElement, {
-      zoomControl: true,
+      zoomControl: false,
     });
+    // Default top-left position clashes with the search bar overlay.
+    L.control.zoom({ position: 'topright' }).addTo(this.map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',

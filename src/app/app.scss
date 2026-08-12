@@ -55,7 +55,8 @@
   position: absolute;
   top: 0.75rem;
   left: 0.75rem;
-  right: 0.75rem;
+  // Leave room for Leaflet's zoom control (top-right).
+  right: 3.25rem;
   z-index: 1000;
 }
 
