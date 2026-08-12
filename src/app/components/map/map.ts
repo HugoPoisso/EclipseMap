@@ -121,7 +121,11 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    const L = await import('leaflet');
+    const leafletModule = await import('leaflet');
+    // esbuild's async-chunk interop for this CJS package puts everything
+    // behind `.default` instead of flattening it onto the namespace object
+    // (unlike the static-import case), so normalize for both shapes.
+    const L = (leafletModule as unknown as { default?: Leaflet }).default ?? leafletModule;
     this.L = L;
     this.defaultIcon = buildDefaultIcon(L);
     this.selectedIcon = buildSelectedIcon(L);
