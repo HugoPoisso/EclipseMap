@@ -2,17 +2,24 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  inject,
   input,
   OnChanges,
   OnDestroy,
   output,
+  PLATFORM_ID,
   SimpleChanges,
   viewChild,
 } from '@angular/core';
-import * as L from 'leaflet';
+import { isPlatformBrowser } from '@angular/common';
+import type * as L from 'leaflet';
 import { ECLIPSE_REFERENCE } from '../../data/eclipse-reference';
 import { ViewingPoint } from '../../models/viewing-point.model';
 import { VisibilityPoint } from '../../models/visibility-point.model';
+
+// Leaflet touches `window` at module-evaluation time, which breaks under
+// SSR/prerendering. Loaded dynamically so it's never imported on the server.
+type Leaflet = typeof L;
 
 // Département bounding box the visibility-heatmap.png raster covers
 // (printed by scripts/generate-visibility-heatmap.mjs when it's regenerated).
@@ -62,25 +69,29 @@ function distanceKm(a: L.LatLng, b: VisibilityPoint): number {
 // iconUrl/shadowUrl (even when they're set explicitly via mergeOptions),
 // and that auto-detection breaks under Angular's content-hashed CSS assets
 // — producing a garbled, 404ing URL. Plain L.icon() has no such prepending.
-const DEFAULT_ICON = L.icon({
-  iconUrl: 'leaflet/marker-icon.png',
-  iconRetinaUrl: 'leaflet/marker-icon-2x.png',
-  shadowUrl: 'leaflet/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
+function buildDefaultIcon(L: Leaflet): L.Icon {
+  return L.icon({
+    iconUrl: 'leaflet/marker-icon.png',
+    iconRetinaUrl: 'leaflet/marker-icon-2x.png',
+    shadowUrl: 'leaflet/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
+}
 
-const SELECTED_ICON = L.icon({
-  iconUrl: 'leaflet/marker-icon-2x.png',
-  shadowUrl: 'leaflet/marker-shadow.png',
-  iconSize: [30, 49],
-  iconAnchor: [15, 49],
-  popupAnchor: [1, -40],
-  shadowSize: [41, 41],
-  className: 'marker-selected',
-});
+function buildSelectedIcon(L: Leaflet): L.Icon {
+  return L.icon({
+    iconUrl: 'leaflet/marker-icon-2x.png',
+    shadowUrl: 'leaflet/marker-shadow.png',
+    iconSize: [30, 49],
+    iconAnchor: [15, 49],
+    popupAnchor: [1, -40],
+    shadowSize: [41, 41],
+    className: 'marker-selected',
+  });
+}
 
 @Component({
   selector: 'app-map',
@@ -95,14 +106,26 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   flyTo = input<{ lat: number; lng: number } | null>(null);
   pointSelected = output<ViewingPoint>();
 
+  private readonly platformId = inject(PLATFORM_ID);
   private mapContainer = viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
 
+  private L?: Leaflet;
+  private defaultIcon?: L.Icon;
+  private selectedIcon?: L.Icon;
   private map?: L.Map;
   private markers = new Map<string, L.Marker>();
   private visibilityLayer?: L.ImageOverlay;
   private lookupPromise?: Promise<VisibilityPoint[]>;
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const L = await import('leaflet');
+    this.L = L;
+    this.defaultIcon = buildDefaultIcon(L);
+    this.selectedIcon = buildSelectedIcon(L);
+
     this.map = L.map(this.mapContainer().nativeElement, {
       zoomControl: false,
     });
@@ -123,7 +146,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!this.map) {
+    if (!this.map || !this.L) {
       return;
     }
     if (changes['points']) {
@@ -147,14 +170,16 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private renderMarkers(): void {
-    if (!this.map) {
+    if (!this.map || !this.L) {
       return;
     }
     this.markers.forEach((marker) => marker.remove());
     this.markers.clear();
 
     for (const point of this.points()) {
-      const marker = L.marker([point.lat, point.lng], { icon: DEFAULT_ICON }).addTo(this.map);
+      const marker = this.L
+        .marker([point.lat, point.lng], { icon: this.defaultIcon })
+        .addTo(this.map);
       marker.bindPopup(
         `<strong>${point.nom}</strong><br>${point.commune}<br>Max. ${point.eclipse.obscurationPct.toFixed(1)} % à ${point.eclipse.heureMaximum}`,
       );
@@ -165,15 +190,15 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private fitToPoints(): void {
     const pts = this.points();
-    if (!this.map || pts.length === 0) {
+    if (!this.map || !this.L || pts.length === 0) {
       return;
     }
-    const bounds = L.latLngBounds(pts.map((p) => [p.lat, p.lng] as [number, number]));
+    const bounds = this.L.latLngBounds(pts.map((p) => [p.lat, p.lng] as [number, number]));
     this.map.fitBounds(bounds, { padding: [32, 32] });
   }
 
   private applyVisibilityLayer(): void {
-    if (!this.map) {
+    if (!this.map || !this.L) {
       return;
     }
     if (!this.showVisibilityLayer()) {
@@ -185,7 +210,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     if (!this.visibilityLayer) {
       // Renders in Leaflet's overlayPane (z-index 400), below markerPane
       // (600), so markers stay on top without any extra z-index handling.
-      this.visibilityLayer = L.imageOverlay(VISIBILITY_IMAGE_URL, VISIBILITY_BOUNDS, {
+      this.visibilityLayer = this.L.imageOverlay(VISIBILITY_IMAGE_URL, VISIBILITY_BOUNDS, {
         opacity: 0.75,
         interactive: false,
       });
@@ -194,10 +219,11 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private async onMapClick(latlng: L.LatLng): Promise<void> {
-    if (!this.map) {
+    if (!this.map || !this.L) {
       return;
     }
-    const popup = L.popup({ className: 'visibility-popup' })
+    const popup = this.L
+      .popup({ className: 'visibility-popup' })
       .setLatLng(latlng)
       .setContent('<p class="popup-loading">Chargement…</p>')
       .openOn(this.map);
@@ -254,9 +280,12 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private applySelection(): void {
+    if (!this.defaultIcon || !this.selectedIcon) {
+      return;
+    }
     const id = this.selectedId();
     for (const [pointId, marker] of this.markers) {
-      marker.setIcon(pointId === id ? SELECTED_ICON : DEFAULT_ICON);
+      marker.setIcon(pointId === id ? this.selectedIcon : this.defaultIcon);
       if (pointId === id) {
         marker.openPopup();
         this.map?.panTo(marker.getLatLng());
