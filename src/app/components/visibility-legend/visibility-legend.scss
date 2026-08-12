@@ -1,0 +1,38 @@
+.legend {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 1000;
+  background: var(--color-panel-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  width: 200px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.35);
+}
+
+.bar {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #d64545, #e8c547, #3f9142);
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.3rem;
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+
+  span:last-child {
+    text-align: right;
+  }
+}
+
+.disclaimer {
+  margin: 0.5rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  font-style: italic;
+  color: var(--color-text-muted);
+}

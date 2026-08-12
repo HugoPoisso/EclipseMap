@@ -1,0 +1,56 @@
+<header class="app-header">
+  <h1>Éclipse solaire du 12 août 2026 — Alpes-Maritimes</h1>
+  <p class="intro">
+    Depuis les Alpes-Maritimes, l'éclipse ne sera jamais totale : jusqu'à
+    <strong>95&nbsp;% du Soleil</strong> sera masqué vers <strong>20h24</strong>, mais le Soleil
+    se couchera avant la fin du phénomène. À ce moment-là, il sera très bas sur l'horizon,
+    vers l'<strong>ouest-nord-ouest</strong> — un horizon dégagé dans cette direction est donc
+    essentiel pour bien l'observer. Choisissez un point d'observation ci-dessous.
+  </p>
+  <p class="safety">
+    ⚠️ Même très partiellement éclipsé, le Soleil reste dangereux pour les yeux. Utilisez des
+    lunettes certifiées <strong>ISO&nbsp;12312-2</strong> et ne le regardez jamais à l'œil nu, ni
+    à travers un appareil photo, des jumelles ou un télescope sans filtre solaire adapté.
+  </p>
+  <label class="visibility-toggle">
+    <input type="checkbox" [checked]="showVisibilityLayer()" (change)="showVisibilityLayer.set(!showVisibilityLayer())" />
+    Afficher la carte de visibilité (estimation)
+  </label>
+</header>
+
+<main class="app-main">
+  <app-map
+    class="map"
+    [points]="points"
+    [selectedId]="selected()?.id ?? null"
+    [showVisibilityLayer]="showVisibilityLayer()"
+    [flyTo]="flyToTarget()"
+    (pointSelected)="onPointSelected($event)"
+  ></app-map>
+
+  <div class="search-overlay">
+    <app-search-bar (locationSelected)="onLocationSelected($event)" />
+  </div>
+
+  @if (showVisibilityLayer()) {
+    <app-visibility-legend />
+  }
+
+  <aside class="panel" [class.open]="panelOpen()">
+    <button type="button" class="panel-toggle" (click)="panelOpen.set(!panelOpen())">
+      {{ panelOpen() ? 'Masquer' : 'Voir les points d’observation' }}
+    </button>
+
+    <div class="panel-content">
+      @if (selected(); as p) {
+        <app-point-detail [point]="p" />
+        <hr />
+      }
+      <app-point-list
+        [points]="points"
+        [selectedId]="selected()?.id ?? null"
+        (pointSelected)="onPointSelected($event)"
+      />
+    </div>
+  </aside>
+</main>

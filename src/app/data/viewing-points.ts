@@ -1,0 +1,213 @@
+import { ViewingPoint } from '../models/viewing-point.model';
+import { ECLIPSE_REFERENCE as REFERENCE } from './eclipse-reference';
+
+// Les coordonnées ci-dessous sont des positions indicatives : à vérifier sur le terrain
+// (vue satellite / repérage) avant utilisation, l'horizon dégagé vers l'Ouest-Nord-Ouest
+// étant le critère décisif pour ces observations.
+
+export const VIEWING_POINTS: ViewingPoint[] = [
+  {
+    id: 'nice-promenade-anglais',
+    nom: 'Promenade des Anglais',
+    commune: 'Nice',
+    lat: 43.6959,
+    lng: 7.265,
+    description:
+      "La grande promenade en bord de mer offre un horizon marin dégagé plein ouest, sans obstacle. C'est le point le plus accessible et le plus fréquenté de Nice pour suivre l'éclipse.",
+    tags: ['vue-mer', 'facile-acces', 'urbain'],
+    accessibilite: 'Accès piéton libre, nombreux arrêts de tramway et de bus à proximité.',
+    eclipse: { ...REFERENCE, approximatif: false },
+  },
+  {
+    id: 'nice-mont-boron',
+    nom: 'Mont Boron',
+    commune: 'Nice',
+    lat: 43.6947,
+    lng: 7.3114,
+    altitudeM: 178,
+    description:
+      "Point haut boisé à l'est de Nice avec des belvédères aménagés. Nécessite de choisir un emplacement dégagé vers l'ouest-nord-ouest, la végétation pouvant masquer l'horizon par endroits.",
+    tags: ['altitude', 'vue-mer', 'crete'],
+    accessibilite: 'Parking au sommet, sentiers piétons, quelques minutes de marche jusqu’aux points de vue.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'nice-colline-chateau',
+    nom: 'Colline du Château — Tour Bellanda',
+    commune: 'Nice',
+    lat: 43.6959,
+    lng: 7.2823,
+    altitudeM: 92,
+    description:
+      "Terrasse panoramique en centre-ville dominant la baie des Anges, ouverte sur l'ouest. Le parc reste accessible jusqu'à 21h ce soir-là.",
+    tags: ['altitude', 'vue-mer', 'urbain', 'facile-acces'],
+    accessibilite: "Accès à pied depuis le Vieux Nice (escaliers ou ascenseur), ouvert jusqu'à 21h.",
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'cannes-front-de-mer',
+    nom: 'Front de mer (secteur ouest-nord-ouest)',
+    commune: 'Cannes',
+    lat: 43.5488,
+    lng: 7.0246,
+    description:
+      "Les abords de la Croisette et du port offrent des vues dégagées vers l'ouest-nord-ouest sur la baie. Privilégier les secteurs sans immeubles ni jetées dans l'axe du coucher de soleil.",
+    tags: ['vue-mer', 'urbain', 'facile-acces'],
+    accessibilite: 'Front de mer piéton, accès libre.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'cannes-croix-des-gardes',
+    nom: 'Croix des Gardes',
+    commune: 'Cannes',
+    lat: 43.5605,
+    lng: 6.9843,
+    altitudeM: 164,
+    description:
+      "Colline boisée dominant Cannes avec quelques clairières offrant un panorama sur la mer et l'Esterel. Repérer un emplacement dégagé avant le jour J.",
+    tags: ['altitude', 'vue-mer', 'crete'],
+    accessibilite: 'Sentiers de randonnée, plusieurs accès depuis les quartiers résidentiels.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'antibes-remparts',
+    nom: 'Remparts du Vieil Antibes',
+    commune: 'Antibes',
+    lat: 43.5809,
+    lng: 7.1259,
+    description:
+      "Le chemin des remparts longe la mer face à l'ouest, avec vue sur le Cap d'Antibes et, par temps clair, l'Esterel.",
+    tags: ['vue-mer', 'urbain'],
+    accessibilite: 'Promenade piétonne libre en bord de mer.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'antibes-cap',
+    nom: "Cap d'Antibes",
+    commune: 'Antibes',
+    lat: 43.5518,
+    lng: 7.1281,
+    description:
+      "Pointe rocheuse avancée dans la mer offrant un large horizon marin. Plusieurs criques et sentiers du littoral permettent de trouver un dégagement vers l'ouest.",
+    tags: ['vue-mer', 'crete'],
+    accessibilite: 'Sentier du littoral, quelques zones à accès réglementé (propriétés privées) à contourner.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'antibes-pointe-garoupe',
+    nom: 'Pointe de la Garoupe',
+    commune: 'Antibes',
+    lat: 43.5652,
+    lng: 7.131,
+    altitudeM: 75,
+    description:
+      "Plateau du phare de la Garoupe, l'un des plus beaux panoramas à 360° du Cap d'Antibes, avec une vue dégagée sur la Baie des Anges vers l'ouest.",
+    tags: ['altitude', 'vue-mer', 'crete'],
+    accessibilite: 'Parking à proximité, quelques minutes de marche jusqu’au sémaphore.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'eze-fort-reviere',
+    nom: 'Fort de la Revère',
+    commune: 'Èze',
+    lat: 43.7391,
+    lng: 7.3668,
+    altitudeM: 696,
+    description:
+      "Ancien fort militaire du parc de la Grande Corniche, avec un panorama exceptionnel sur toute la baie de Villefranche et la Riviera. Choisir un emplacement dégagé côté ouest, la crête pouvant masquer l'horizon par endroits.",
+    tags: ['altitude', 'crete', 'vue-mer'],
+    accessibilite: 'Parking du parc départemental, marche courte jusqu’aux points de vue.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'col-de-vence',
+    nom: 'Col de Vence',
+    commune: 'Tourrettes-sur-Loup',
+    lat: 43.7746,
+    lng: 7.1003,
+    altitudeM: 970,
+    description:
+      "Col des préalpes de Grasse offrant un vaste panorama vers le sud et l'ouest, au-dessus de la brume du littoral. Peu de constructions, bon dégagement d'horizon.",
+    tags: ['altitude', 'crete'],
+    accessibilite: 'Accès en voiture par la route du col, arrêts possibles en bord de route.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'gourdon',
+    nom: 'Gourdon',
+    commune: 'Gourdon',
+    lat: 43.7122,
+    lng: 6.9793,
+    altitudeM: 760,
+    description:
+      "Village perché en nid d'aigle dominant la vallée du Loup, avec un panorama réputé jusqu'à la mer. Vérifier que la crête environnante ne masque pas l'horizon ouest depuis le point choisi.",
+    tags: ['altitude', 'crete', 'vue-mer'],
+    accessibilite: 'Village accessible en voiture, places de parking limitées — arriver tôt recommandé.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'saint-vallier-de-thiey',
+    nom: 'Saint-Vallier-de-Thiey',
+    commune: 'Saint-Vallier-de-Thiey',
+    lat: 43.6989,
+    lng: 6.8503,
+    altitudeM: 730,
+    description:
+      "Plateau des préalpes de Grasse avec des ouvertures dégagées sur l'horizon ouest, loin de la pollution lumineuse et de la brume côtière.",
+    tags: ['altitude'],
+    accessibilite: 'Village accessible en voiture, plusieurs points de vue aux abords.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'col-du-ferrier',
+    nom: 'Col du Ferrier',
+    commune: 'Gréolières',
+    lat: 43.755,
+    lng: 6.95,
+    altitudeM: 1085,
+    description:
+      "Col d'altitude entre Gréolières et Coursegoules, avec un horizon dégagé sur les crêtes préalpines. Nécessite de repérer un emplacement sans obstruction vers l'ouest-nord-ouest.",
+    tags: ['altitude', 'crete'],
+    accessibilite: 'Accès en voiture, arrêts en bord de route de montagne.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'greolieres',
+    nom: 'Gréolières',
+    commune: 'Gréolières',
+    lat: 43.7508,
+    lng: 6.9491,
+    altitudeM: 800,
+    description:
+      "Village de moyenne montagne au pied de la Montagne du Cheiron, offrant des dégagements vers l'ouest depuis ses abords.",
+    tags: ['altitude'],
+    accessibilite: 'Village accessible en voiture.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'coursegoules',
+    nom: 'Coursegoules',
+    commune: 'Coursegoules',
+    lat: 43.7953,
+    lng: 7.0492,
+    altitudeM: 1000,
+    description:
+      "Village perché des préalpes de Nice, avec un panorama sur les vallées environnantes. Choisir un point dégagé côté ouest, loin des falaises du Cheiron qui bordent le village au nord.",
+    tags: ['altitude'],
+    accessibilite: 'Village accessible en voiture.',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+  {
+    id: 'valberg-eguilles',
+    nom: 'Sommet des Éguilles',
+    commune: 'Péone (Valberg)',
+    lat: 44.088,
+    lng: 6.939,
+    altitudeM: 1880,
+    description:
+      "Sommet accessible par télésiège dominant la station de Valberg, dans le haut pays niçois. Une observation organisée avec médiateurs scientifiques est prévue sur place à partir de 19h00, sous réserve de météo favorable.",
+    tags: ['altitude', 'crete', 'evenement-officiel'],
+    accessibilite: 'Montée en télésiège depuis Valberg (horaires à confirmer le jour J).',
+    eclipse: { ...REFERENCE, approximatif: true },
+  },
+];

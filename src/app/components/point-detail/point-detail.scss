@@ -1,0 +1,72 @@
+.detail {
+  padding: 1rem 1.25rem 1.5rem;
+}
+
+header {
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--color-text);
+}
+
+.commune {
+  margin: 0.15rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0.75rem 0;
+
+  li {
+    background: var(--color-tag-bg);
+    color: var(--color-accent);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+.description {
+  line-height: 1.5;
+  margin: 0.75rem 0;
+}
+
+.access {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0.75rem 0;
+}
+
+.circumstances {
+  margin: 1rem 0 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+
+  dt {
+    color: var(--color-text-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+.approx-note {
+  margin-top: 0.9rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,22 @@
+<div class="search-bar">
+  <input
+    type="text"
+    placeholder="Rechercher une ville..."
+    [value]="query()"
+    (input)="onInput($any($event.target).value)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  />
+  @if (loading()) {
+    <span class="spinner" aria-hidden="true"></span>
+  }
+  @if (open() && results().length) {
+    <ul class="results">
+      @for (r of results(); track r.label) {
+        <li>
+          <button type="button" (click)="select(r)">{{ r.label }}</button>
+        </li>
+      }
+    </ul>
+  }
+</div>

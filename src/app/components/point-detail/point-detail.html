@@ -1,0 +1,35 @@
+<article class="detail">
+  <header>
+    <h2>{{ point().nom }}</h2>
+    <p class="commune">{{ point().commune }}</p>
+  </header>
+
+  <ul class="tags">
+    @for (tag of point().tags; track tag) {
+      <li>{{ tagLabels[tag] }}</li>
+    }
+  </ul>
+
+  <p class="description">{{ point().description }}</p>
+
+  @if (point().accessibilite) {
+    <p class="access"><strong>Accès :</strong> {{ point().accessibilite }}</p>
+  }
+
+  <dl class="circumstances">
+    <dt>Début</dt>
+    <dd>{{ point().eclipse.heureDebut }}</dd>
+    <dt>Maximum</dt>
+    <dd>{{ point().eclipse.heureMaximum }} — {{ point().eclipse.obscurationPct }} % du soleil masqué</dd>
+    <dt>Fin (coucher du soleil)</dt>
+    <dd>{{ point().eclipse.heureFin }}</dd>
+    <dt>Hauteur / azimut du soleil au maximum</dt>
+    <dd>{{ point().eclipse.altitudeSoleilDeg }}° au-dessus de l'horizon, vers {{ point().eclipse.azimutSoleilDeg }}° (Ouest-Nord-Ouest)</dd>
+  </dl>
+
+  @if (point().eclipse.approximatif) {
+    <p class="approx-note">
+      Horaires estimés à partir des données de Nice, à quelques minutes près selon la commune.
+    </p>
+  }
+</article>

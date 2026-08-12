@@ -1,0 +1,16 @@
+<ul class="point-list">
+  @for (point of points(); track point.id) {
+    <li>
+      <button
+        type="button"
+        class="point-item"
+        [class.selected]="point.id === selectedId()"
+        (click)="pointSelected.emit(point)"
+      >
+        <span class="nom">{{ point.nom }}</span>
+        <span class="commune">{{ point.commune }}</span>
+        <span class="obscuration">{{ point.eclipse.obscurationPct }} %</span>
+      </button>
+    </li>
+  }
+</ul>

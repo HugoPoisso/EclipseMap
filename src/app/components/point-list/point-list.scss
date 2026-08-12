@@ -1,0 +1,50 @@
+.point-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.point-item {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border: none;
+  background: transparent;
+  border-radius: 0.5rem;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: var(--color-text);
+
+  &:hover {
+    background: var(--color-tag-bg);
+  }
+
+  &.selected {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+
+    .commune {
+      color: inherit;
+      opacity: 0.85;
+    }
+  }
+}
+
+.nom {
+  font-weight: 600;
+  flex: 1;
+}
+
+.commune {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.obscuration {
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
